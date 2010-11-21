@@ -1,4 +1,4 @@
-module Conversions
+module UnitConversions
 
 # Length
   FEET_PER_METER = 3.281
@@ -103,10 +103,15 @@ module Conversions
     feet(p) / FEET_PER_LEAGUE
   end
 
+
 # Area
 
-  def meters_square
-
+  def self.meters2( p )
+    a = mm2_ft2(p)
+    a[:ft2]/FEET_PER_METER**2 + a[:mm2]/MILLIMETERS_PER_METER**2
+  end
+  def self.m2( p )
+    meters2 p
   end
 
 
@@ -127,6 +132,18 @@ private
     mm = mm + ((p[:meters] ||= 0) + (p[:m] ||= 0)) * MILLIMETERS_PER_METER
     mm = mm + ((p[:kilometers] ||= 0) + (p[:km] ||= 0)) * MILLIMETERS_PER_KILOMETER
     { :mm => mm, :ft => feet }
+  end
+
+  def self.mm2_ft2 ( p )
+    feet2 = ((p[:inches2] ||= 0) + (p[:ins2] ||= 0)) * FEET_PER_INCH**2
+    feet2 = feet2 + (p[:feet2] ||= 0) + (p[:ft2] ||= 0)
+    feet2 = feet2 + ((p[:yards2] ||= 0) + (p[:yds2] ||= 0)) * FEET_PER_YARD**2
+    feet2 = feet2 + ((p[:miles2] ||= 0) + (p[:mls2] ||= 0)) * FEET_PER_MILE**2
+    mm2 = (p[:millimeters2] ||= 0) + (p[:mm2] ||= 0)
+    mm2 = mm2 + ((p[:centimeters2] ||= 0) + (p[:cm2] ||= 0)) * MILLIMETERS_PER_CENTIMETER**2
+    mm2 = mm2 + ((p[:meters2] ||= 0) + (p[:m2] ||= 0)) * MILLIMETERS_PER_METER**2
+    mm2 = mm2 + ((p[:kilometers2] ||= 0) + (p[:km2] ||= 0)) * MILLIMETERS_PER_KILOMETER**2
+    { :mm2 => mm2, :ft2 => feet2 }
   end
 
 end
